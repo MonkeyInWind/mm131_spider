@@ -95,7 +95,7 @@ def all_img (urls):
             response = requests.get(url)
             response.encoding = "gbk"
             if response.status_code == 200:
-               # n += 1
+               #n += 1
                 print("get url: " + url + " success")
                 soup = BeautifulSoup(response.text, 'html.parser')
                 title = soup.select('.content h5')[0].text
