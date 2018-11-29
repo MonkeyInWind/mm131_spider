@@ -88,13 +88,14 @@ def each_class_List (pages_list):
 #所有图片标题、链接
 def all_img (urls):
     images = []
+    #n = 0
     try:
         for url in urls:
             #time.sleep(random.uniform(0, 2))
             response = requests.get(url)
             response.encoding = "gbk"
             if response.status_code == 200:
-                n += 1
+               #n += 1
                 print("get url: " + url + " success")
                 soup = BeautifulSoup(response.text, 'html.parser')
                 title = soup.select('.content h5')[0].text
@@ -113,6 +114,8 @@ def all_img (urls):
                     "title": title,
                     "urls": pics
                 })
+            #if n == 5:
+            #    break
         return images
     except:
         print("get all images link error")
@@ -141,6 +144,7 @@ def load_image(class_name, class_name_en, img):
             url_arr = url.split('/')
             dir_name = url_arr[-2]
             img_name = url_arr[-1]
+            #print("loading: " + class_name + " " + title +" " + url + " to " + dir_name + "/" + img_name)
             response = requests.get(url, headers = set_header(url, class_name_en))
             if response.status_code == 200:
                 save_img(class_name, title, dir_name, img_name, response.content)
