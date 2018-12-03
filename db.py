@@ -14,17 +14,21 @@ connection = pymysql.connect(
 
 def save_img_to_db(class_en, img_url, title_id):
     try:
-        cid = uuid.uuid1()
+        cid = str(uuid.uuid1())
         time_stamp = str(int(time.time()))
-        print (cid, time_stamp)
         with connection.cursor() as cursor:
             sql = "insert into `mm131` (`id`, `time_stamp`, `class_en`, `url`, `title_id`) values (%s, %s, %s, %s, %s)"
-            #cursor.execute(sql, (cid, time_stamp, class_en, img_url, title_id))
-            cursor.execute(sql, ("a", "a", "a", "a", "a"))
+            cursor.execute(sql, (cid, time_stamp, class_en, img_url, title_id))
+            #cursor.execute(sql, ("a", "a", "a", "a", "a"))
 
         connection.commit()
-    except:
+        return None
+    except Exception as e:
         print('save image to db error')
-    finally:
-        connection.close()
+        print(e)
+        return None
+    #finally:
+    #    connection.close()
+    #    print ('save ' + class_en + ' success...')
+    #    return None
 

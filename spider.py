@@ -35,8 +35,9 @@ def get_free_class ():
                     "class_name_en": item.get('href').split("/")[-2]
                 }
         return None
-    except:
+    except Exception as e:
         print('get picture class error')
+        print(e)
         return None
 
 #获取每个分类下的所有页码链接
@@ -61,8 +62,9 @@ def each_class_page (each_class):
                 'urls': urls
             }
         return None
-    except:
+    except Exception as e:
         print('each class page error')
+        print(e)
         return None
 
 #每个分类的所有图片列表
@@ -82,8 +84,9 @@ def each_class_List (pages_list):
                         continue
                     imgs_list.append(a.get('href'))
         return imgs_list
-    except:
+    except Exceprion as e:
         print('each class list error')
+        print(e)
         return None
 
 #所有图片标题、链接
@@ -118,8 +121,9 @@ def all_img (urls):
             if n == 5:
                 break
         return images
-    except:
+    except Exception as e:
         print("get all images link error")
+        print(e)
         return None
 
 def save_img (class_name, title, dir_name, img_name, content):
@@ -133,10 +137,12 @@ def save_img (class_name, title, dir_name, img_name, content):
         if not os.path.exists(file_path):
             with open(file_path, 'wb') as f:
                 f.write(content)
-                save_img_to_db("a", "a", "a")
                 f.close()
-    except:
+        save_img_to_db("a", "a", "a")
+    except Exception as e:
         print('save image error')
+        print(e)
+        return None
 
 def load_image(class_name, class_name_en, img):
     try:
@@ -151,8 +157,9 @@ def load_image(class_name, class_name_en, img):
             if response.status_code == 200:
                 save_img(class_name, title, dir_name, img_name, response.content)
         return None
-    except:
+    except Exception as e:
         print('load image error')
+        print(e)
         return None
 
 def main ():
