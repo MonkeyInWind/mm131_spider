@@ -3,20 +3,26 @@ import uuid
 import time
 
 connection = pymysql.connect(
-            host = 'localhost',
+            host = '127.0.0.1',
+            port = 3306,
             user = 'root',
             password = '111111',
-            db = 'img_spider',
-            charset = 'utf8mb4',
-            cursorclass = pymysql.cursors.DictCursor
+            database = 'img_spider',
+            charset = 'utf8'
         )
 
-def save_title(title, img_id, class_en):
 
-
-def save_img(class_cn, class_en, img_url):
+def save_img_to_db(class_en, img_url, title_id):
     try:
-        id = models.UUIDField(primary_key = True, default = uuid.uuid1(), editable = False, null = False)
+        cid = uuid.uuid1()
         time_stamp = str(int(time.time()))
+        print (cid, time_stamp)
         with connection.cursor() as cursor:
-            sql = "insert into 'mm131' ('id', 'time_stamp')"
+            sql = "insert into `mm131` (`id`, `time_stamp`, `class_en`, `url`, title_id) values (%s, %s, %s, %s, %s)"
+            #cursor.execute(sql, (cid, time_stamp, class_en, img_url, title_id))
+            cursor.execute(sql, ("a", "a", "a", "a", "a"))
+
+        connection.commit()
+    finally:
+        connection.close()
+

@@ -6,9 +6,10 @@ from requests.exceptions import RequestException
 from multiprocessing import Pool
 from bs4 import BeautifulSoup
 from hashlib import md5
-from set_header import set_header
 import random
 import time
+from set_header import set_header
+from db import save_img_to_db
 
 # p = open('./proxy.txt')
 # proxy_pool = p.read().split('\n')
@@ -88,14 +89,14 @@ def each_class_List (pages_list):
 #所有图片标题、链接
 def all_img (urls):
     images = []
-    #n = 0
+    n = 0
     try:
         for url in urls:
             #time.sleep(random.uniform(0, 2))
             response = requests.get(url)
             response.encoding = "gbk"
             if response.status_code == 200:
-               #n += 1
+                n += 1
                 print("get url: " + url + " success")
                 soup = BeautifulSoup(response.text, 'html.parser')
                 title = soup.select('.content h5')[0].text
@@ -114,8 +115,8 @@ def all_img (urls):
                     "title": title,
                     "urls": pics
                 })
-            #if n == 5:
-            #    break
+            if n == 5:
+                break
         return images
     except:
         print("get all images link error")
@@ -132,6 +133,7 @@ def save_img (class_name, title, dir_name, img_name, content):
         if not os.path.exists(file_path):
             with open(file_path, 'wb') as f:
                 f.write(content)
+                save_img_to_db("a", "a", "a")
                 f.close()
     except:
         print('save image error')
