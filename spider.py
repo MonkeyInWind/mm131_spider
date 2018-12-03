@@ -114,11 +114,12 @@ def all_img (urls, class_name, class_name_en):
                 for i in img_index_list:
                     pics.append("http://img1.mm131.me/pic/" + prefix + "/" + str(i) + "." + suffix)
 
+                title_id = save_img_title(class_name_en, class_name, title)
                 images.append({
                     "title": title,
-                    "urls": pics
+                    "urls": pics,
+                    "title_id": title_id
                 })
-                save_img_title(class_name_en, class_name, title)
             if n == 5:
                 break
         return images
@@ -127,9 +128,9 @@ def all_img (urls, class_name, class_name_en):
         print(e)
         return None
 
-def save_img (class_name, title, dir_name, img_name, content):
+def save_img (class_en, title, dir_name, img_name, content, title_id):
     try:
-        print("saving: " + class_name + " " + title +" to ./images/" + dir_name + "/" + img_name)
+        print("saving: " + class_en + " " + title +" to ./images/" + dir_name + "/" + img_name)
         dir_path = "./images/" + dir_name
         file_path = dir_path + "/" + img_name
         has_dir = os.path.exists(dir_path)
@@ -139,7 +140,7 @@ def save_img (class_name, title, dir_name, img_name, content):
             with open(file_path, 'wb') as f:
                 f.write(content)
                 f.close()
-        save_img_to_db("a", "a", "a")
+        save_img_to_db(class_en, file_path, title_id)
     except Exception as e:
         print('save image error')
         print(e)
@@ -149,6 +150,7 @@ def load_image(class_name, class_name_en, img):
     try:
         title = img['title']
         urls = img['urls']
+        title_id = img['title_id']
         for url in urls:
             url_arr = url.split('/')
             dir_name = url_arr[-2]
@@ -156,7 +158,7 @@ def load_image(class_name, class_name_en, img):
             #print("loading: " + class_name + " " + title +" " + url + " to " + dir_name + "/" + img_name)
             response = requests.get(url, headers = set_header(url, class_name_en))
             if response.status_code == 200:
-                save_img(class_name, title, dir_name, img_name, response.content)
+                save_img(class_name_en, title, dir_name, img_name, response.content, title_id)
         return None
     except Exception as e:
         print('load image error')
