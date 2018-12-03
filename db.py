@@ -46,3 +46,34 @@ def save_img_title(class_en, class_cn, title):
         return None
     #finally:
      #   connection.close()
+
+def select_title(class_en, title):
+    try:
+        with connection.cursor() as cursor:
+            sql = "select * from `mm131_titles` where `title`=%s and `class_en`=%s"
+            cursor.execute(sql, (title, class_en))
+            res = cursor.fetchall()
+            if not len(res):
+                return None
+            return res
+        return None
+    except Exception as e:
+        print('select ' + class_en + ' error')
+        print(e)
+        return None
+
+def select_this_img(class_en, url):
+    try:
+        with connection.cursor() as cursor:
+            sql = "select * from `mm131` where `url`=%s and `class_en`=%s"
+            cursor.execute(sql, (url, class_en))
+            res = cursor.fetchall()
+            if not len(res):
+                return None
+            return res
+        return None
+    except Exception as e:
+        print('select ' + url + ' error')
+        print(e)
+        return None
+

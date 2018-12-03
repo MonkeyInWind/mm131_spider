@@ -9,7 +9,7 @@ from hashlib import md5
 import random
 import time
 from set_header import set_header
-from db import save_img_to_db, save_img_title
+from db import save_img_to_db, save_img_title, select_title, select_this_img
 
 # p = open('./proxy.txt')
 # proxy_pool = p.read().split('\n')
@@ -30,7 +30,7 @@ def get_free_class ():
             html = soup.select('.nav a')[1:]
             for item in html:
                 yield {
-                    "text": item.text,
+                    "text": item.text.strip(),
                     "link": item.get("href"),
                     "class_name_en": item.get('href').split("/")[-2]
                 }
@@ -102,7 +102,7 @@ def all_img (urls, class_name, class_name_en):
                 n += 1
                 print("get url: " + url + " success")
                 soup = BeautifulSoup(response.text, 'html.parser')
-                title = soup.select('.content h5')[0].text
+                title = soup.select('.content h5')[0].text.strip()
                 pics = []
                 total_page_text = soup.select('.content .content-page .page-ch')[0].text
                 total = int(re.sub("\D", "", total_page_text))
@@ -114,7 +114,13 @@ def all_img (urls, class_name, class_name_en):
                 for i in img_index_list:
                     pics.append("http://img1.mm131.me/pic/" + prefix + "/" + str(i) + "." + suffix)
 
-                title_id = save_img_title(class_name_en, class_name, title)
+                select_title_res = select_title(class_name_en, title)
+                if not select_title_res:
+                    print('no ' + title + " saved")
+                    title_id = save_img_title(class_name_en, class_name, title)
+                else:
+                    print('this ' + title + ' already saved')
+                    title_id = select_title_res[0][0]
                 images.append({
                     "title": title,
                     "urls": pics,
@@ -140,7 +146,12 @@ def save_img (class_en, title, dir_name, img_name, content, title_id):
             with open(file_path, 'wb') as f:
                 f.write(content)
                 f.close()
-        save_img_to_db(class_en, file_path, title_id)
+        select_this_img_res = select_this_img(class_en, file_path)
+        if not select_this_img_res:
+            print('this image no saved')
+            save_img_to_db(class_en, file_path, title_id)
+        else:
+            print('this image ' + select_this_img_res[0][0] + ' already saved')
     except Exception as e:
         print('save image error')
         print(e)
