@@ -19,7 +19,6 @@ def save_img_to_db(class_en, img_url, title_id):
         with connection.cursor() as cursor:
             sql = "insert into `mm131` (`id`, `time_stamp`, `class_en`, `url`, `title_id`) values (%s, %s, %s, %s, %s)"
             cursor.execute(sql, (cid, time_stamp, class_en, img_url, title_id))
-            #cursor.execute(sql, ("a", "a", "a", "a", "a"))
 
         connection.commit()
         return None
@@ -31,4 +30,19 @@ def save_img_to_db(class_en, img_url, title_id):
     #    connection.close()
     #    print ('save ' + class_en + ' success...')
     #    return None
+def save_img_title(class_en, class_cn, title):
+    try:
+        cid = str(uuid.uuid1())
+        time_stamp = str(int(time.time()))
+        with connection.cursor() as cursor:
+            sql = "insert into `mm131_titles` (`id`, `time_stamp`, `class_en`, `class_cn`, `title`) values (%s, %s, %s, %s, %s)"
+            cursor.execute(sql, (cid, time_stamp, class_en, class_cn, title))
 
+        connection.commit()
+        return cid
+    except Exception as e:
+        print('save ' + class_en + ' ' + title + ' error')
+        print(e)
+        return None
+    #finally:
+     #   connection.close()

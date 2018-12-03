@@ -9,7 +9,7 @@ from hashlib import md5
 import random
 import time
 from set_header import set_header
-from db import save_img_to_db
+from db import save_img_to_db, save_img_title
 
 # p = open('./proxy.txt')
 # proxy_pool = p.read().split('\n')
@@ -90,7 +90,7 @@ def each_class_List (pages_list):
         return None
 
 #所有图片标题、链接
-def all_img (urls):
+def all_img (urls, class_name, class_name_en):
     images = []
     n = 0
     try:
@@ -118,6 +118,7 @@ def all_img (urls):
                     "title": title,
                     "urls": pics
                 })
+                save_img_title(class_name_en, class_name, title)
             if n == 5:
                 break
         return images
@@ -169,7 +170,7 @@ def main ():
         class_name_en = item['class_name_en']
         each_class_all_pages = each_class_page(item)
         all_list = each_class_List(each_class_all_pages['urls'])
-        all_img_list = all_img(all_list)
+        all_img_list = all_img(all_list, class_name, class_name_en)
         for img in all_img_list:
             load_image(class_name, class_name_en, img)
 
