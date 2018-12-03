@@ -18,11 +18,13 @@ def save_img_to_db(class_en, img_url, title_id):
         time_stamp = str(int(time.time()))
         print (cid, time_stamp)
         with connection.cursor() as cursor:
-            sql = "insert into `mm131` (`id`, `time_stamp`, `class_en`, `url`, title_id) values (%s, %s, %s, %s, %s)"
+            sql = "insert into `mm131` (`id`, `time_stamp`, `class_en`, `url`, `title_id`) values (%s, %s, %s, %s, %s)"
             #cursor.execute(sql, (cid, time_stamp, class_en, img_url, title_id))
             cursor.execute(sql, ("a", "a", "a", "a", "a"))
 
         connection.commit()
+    except:
+        print('save image to db error')
     finally:
         connection.close()
 
