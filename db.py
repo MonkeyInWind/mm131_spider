@@ -11,14 +11,13 @@ connection = pymysql.connect(
             charset = 'utf8'
         )
 
-
-def save_img_to_db(class_en, img_url, title_id):
+def save_img_to_db(class_en, img_url, file_path, title_id):
     try:
         cid = str(uuid.uuid1())
         time_stamp = str(int(time.time()))
         with connection.cursor() as cursor:
-            sql = "insert into `mm131` (`id`, `time_stamp`, `class_en`, `url`, `title_id`) values (%s, %s, %s, %s, %s)"
-            cursor.execute(sql, (cid, time_stamp, class_en, img_url, title_id))
+            sql = "insert into `mm131` (`id`, `time_stamp`, `class_en`, `url`, `title_id`, `file_path`) values (%s, %s, %s, %s, %s, %s)"
+            cursor.execute(sql, (cid, time_stamp, class_en, img_url, title_id, file_path))
 
         connection.commit()
         return None

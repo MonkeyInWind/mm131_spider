@@ -149,7 +149,7 @@ def save_img (class_en, title, dir_name, img_name, content, title_id):
         select_this_img_res = select_this_img(class_en, file_path)
         if not select_this_img_res:
             print('this image no saved')
-            save_img_to_db(class_en, file_path, title_id)
+            save_img_to_db(class_en, file_path, file_path, title_id)
         else:
             print('this image ' + select_this_img_res[0][0] + ' already saved')
     except Exception as e:
